@@ -1,4 +1,5 @@
 # AI-Machine-Learning-Law
+Jonathan Montag
 Summer Research 
 This is a classifier which can read law documents of Veteran Disasbility appeals and will tell the user what type of rhetoric role each sentence had.
 
@@ -21,6 +22,8 @@ Lastly type try_fit() in order to run the model and get back an accuracy score, 
 
 
 (you can also create the file sentiment.json by taking your raw JSON file 'all_sentences.json' and then run it rough sentiment.py which is a algorithm I wrote which will take the sentmient score of each sentence and then turn that number from -1 to 1 into a word such as POS A POS B POS C and the inverse so NEG A NEG B NEG C.  the letter is the magnitutde and goes up to 10 letters in both directinos depending how posotive or negagtive a sentence is.  This word is then tagged in the JSON file in order to add context and increase the accuracy of the algorithm.
+
+There is also a JPG attatched showing what the final output should look like if ran correctly. 
 
 
 
