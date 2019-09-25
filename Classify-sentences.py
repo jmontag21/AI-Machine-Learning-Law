@@ -2,10 +2,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection  import train_test_split
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import json, re, nltk.stem
-
-
-
-
+    
 #                   precision    recall  f1-score   support
 #
 # CitationSentence       0.99      0.95      0.97        87
@@ -16,6 +13,7 @@ import json, re, nltk.stem
 #         Sentence       0.76      0.76      0.76        37
 #
 #      avg / total       0.87      0.87      0.87       580
+
 def load_file(DATA_FILE):
     global data, labels
     
@@ -43,7 +41,7 @@ def load_file(DATA_FILE):
     NOTWHATLABEL= NOTWHAT
     TOKEN_PATTERN='(?u)\\b\\w\\w+\\b'
     REMOVE_DIGITS=True
-    REMOVE_PUNCT=False
+    REMOVE_PUNCT=True
     STEM=False
     
     print("Classifier for", WHAT)
@@ -106,7 +104,7 @@ def load_file(DATA_FILE):
     print("Num sentences after scrubbing and filtering=", len(data))
     
     global vectorizer, features, features_nd, names
-    vectorizer = CountVectorizer(analyzer = 'word', lowercase = 'False', stop_words=None, token_pattern=TOKEN_PATTERN, ngram_range=(1,2), binary = False)
+    vectorizer = CountVectorizer(analyzer = 'word', lowercase = 'False', stop_words=None, token_pattern=TOKEN_PATTERN, ngram_range=(1,2), binary = True)
     print(vectorizer)
     print("Vectorizing ...", end="")    
     features = vectorizer.fit_transform(data)
@@ -142,16 +140,15 @@ def multi(N, randkeys, TRAIN_SIZE, model):
         model = model.fit(X=X_train, y=y_train)
         y_pred = model.predict(X_test)
         
-#        features_as_list = features_nd.tolist()
-#        for i in range(len(X_test)):
-#            #if y_pred[i] != y_test[i]:
-#            if y_pred[i] != y_test[i] and y_test[i] == "ReasoningSentence":
-#                print("*"*50)
-#                print("Labeled as", y_pred[i])
-#                print("Actual is", y_test[i])
-#                Xtestl = X_test[i].tolist()
-#                ind = features_as_list.index(Xtestl)
-#                print("Data =", data[ind])
+        features_as_list = features_nd.tolist()
+        for i in range(len(X_test)):
+            if y_pred[i] != y_test[i]:
+                print("*"*50)
+                print("Labeled as", y_pred[i])
+                print("Actual is", y_test[i])
+                Xtestl = X_test[i].tolist()
+                ind = features_as_list.index(Xtestl)
+                print("Data =", data[ind])
     
         print("Accuracy score:", accuracy_score(y_test, y_pred))
         accuracy.append(accuracy_score(y_test, y_pred))
@@ -184,13 +181,6 @@ def go_log_reg():
     from sklearn.linear_model import LogisticRegression
     model = LogisticRegression(penalty='l1', multi_class='ovr', solver='liblinear')
     
-    
-def Kmean():
-    global model 
-    print("KmeanMachine")
-    from sklearn.cluster import KMeans
-    model = KMeans(n_clusters=6, init='k-means++', n_init=6, max_iter=300, tol=0.0001, precompute_distances='auto', verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm='auto')
-    
 def try_log_reg():
     go_log_reg()
     try_fit()
@@ -206,13 +196,13 @@ def go_NB():
     print("Naive Bayes ...")
     from sklearn.naive_bayes import GaussianNB
     model = GaussianNB()
-
 #ComplementNB
 def go_CNB():
     global model
     print("Complement Naive Bayes ...")
     from sklearn.naive_bayes import ComplementNB
     model = ComplementNB()
+
     
 def go_DT():
     global model
@@ -306,10 +296,8 @@ def all_avgs(results, n_classes=6):
     print("\nConfusion matrix summary")
     for x in avg_conf_mat(results[2], n_classes):
         print(x)
-        
-        
-        
-
+    
+    
 def ranked_for_all():
     for X in [go_svm, go_log_reg, go_NB]:
         X()
@@ -343,10 +331,6 @@ def label_distribution():
         else:
             lab_distrib[label] = 1
     return lab_distrib
-
-
-
-
-
+            
 
 #if __name__ == "__main__":
