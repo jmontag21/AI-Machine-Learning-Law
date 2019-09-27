@@ -6,7 +6,7 @@ Summer Research
 This is a classifier which can read law documents of Veteran Disasbility appeals and will tell the user what type of rhetoric role each sentence had.
 
 
-How to Use:
+How to Run:
 
 Run the Classify.py program then type load_file('sentiment.json')
 
